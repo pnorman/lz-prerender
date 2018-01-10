@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+set -euf -o pipefail
+
+PLANET_FILE='data.osm.pbf'
+
+PLANET_URL='http://download.geofabrik.de/europe/liechtenstein-latest.osm.pbf'
+PLANET_MD5_URL='http://download.geofabrik.de/europe/liechtenstein-latest.osm.pbf.md5'
+
+PGDATABASE='osmcarto_prerender'
+
+function show_help() {
+  cat << EOF
+Usage: ${0##*/} mode
+
+Modes:
+  download: Download a new planet
+
+EOF
+}
+
+function download_planet() {
+  # Clean up any remaining files
+  rm -f -- "${PLANET_FILE}" "${PLANET_FILE}.md5" 'state.txt'
+  
+  # Because the planet file name is set above, the provided md5 file needs altering
+  MD5="$(curl -sL "${PLANET_MD5_URL}" | cut -f1 -d' ')"
+  echo "${MD5}  ${PLANET_FILE}" > "${PLANET_FILE}.md5"  || { echo "Planet md5 failed to download"; exit 1; }
+
+  # Download the planet
+  curl -sL -o "${PLANET_FILE}" "${PLANET_URL}" || { echo "Planet file failed to download"; exit 1; }
+
+  md5sum --quiet --status --strict -c "${PLANET_FILE}.md5" || { echo "md5 check failed"; exit 1; }
+
+  REPLICATION_BASE_URL="$(osmium fileinfo -g 'header.option.osmosis_replication_base_url' "${PLANET_FILE}")"
+  
+  # sed to turn into / formatted, see https://unix.stackexchange.com/a/113798/149591
+  REPLICATION_SEQUENCE_NUMBER="$( printf "%09d" "$(osmium fileinfo -g 'header.option.osmosis_replication_sequence_number' "${PLANET_FILE}")" | sed ':a;s@\B[0-9]\{3\}\>@/&@;ta' )"
+  
+  curl -sL -o 'state.txt' "${REPLICATION_BASE_URL}/${REPLICATION_SEQUENCE_NUMBER}.state.txt"
+}
+
+command="$1"
+
+case "$command" in
+    download)
+    shift
+    download_planet
+    ;;
+
+    *)
+    show_help
+    ;;
+esac
