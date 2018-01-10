@@ -5,7 +5,7 @@ set -euf -o pipefail
 PLANET_FILE='data.osm.pbf'
 
 PLANET_URL='http://download.geofabrik.de/europe/liechtenstein-latest.osm.pbf'
-PLANET_MD5_URL='http://download.geofabrik.de/europe/liechtenstein-latest.osm.pbf.md5'
+PLANET_MD5_URL="${PLANET_URL}.md5"
 
 PGDATABASE='osmcarto_prerender'
 
