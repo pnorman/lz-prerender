@@ -76,6 +76,12 @@ function import_database() {
     -d "${PGDATABASE}" "${PLANET_FILE}"
 }
 
+function install_mapproxy() {
+  rm -rf mapproxy
+  virtualenv --quiet --system-site-packages mapproxy
+  mapproxy/bin/pip install "MapProxy>=1.11.0,<=1.11.99"
+}
+
 command="$1"
 
 case "$command" in
@@ -97,6 +103,11 @@ case "$command" in
     database)
     shift
     import_database
+    ;;
+
+    mapproxy)
+    shift
+    install_mapproxy
     ;;
 
     *)
