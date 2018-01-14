@@ -7,6 +7,9 @@ PLANET_FILE='data.osm.pbf'
 PLANET_URL='http://download.geofabrik.de/europe/liechtenstein-latest.osm.pbf'
 PLANET_MD5_URL="${PLANET_URL}.md5"
 
+OSMCARTO_VERSION="v4.6.0"
+OSMCARTO_LOCATION='https://github.com/gravitystorm/openstreetmap-carto.git'
+
 PGDATABASE='osmcarto_prerender'
 
 function show_help() {
@@ -40,12 +43,28 @@ function download_planet() {
   curl -sL -o 'state.txt' "${REPLICATION_BASE_URL}/${REPLICATION_SEQUENCE_NUMBER}.state.txt"
 }
 
+# Preconditions: None
+# Postconditions:
+# - openstreetmap-carto repo exists
+# - openstreetmap-carto/project.xml exists
+function get_style() {
+  rm -rf -- 'openstreetmap-carto'
+  git -c advice.detachedHead=false clone --quiet --depth 1 \
+    --branch "${OSMCARTO_VERSION}" -- "${OSMCARTO_LOCATION}" 'openstreetmap-carto'
+  carto -a 3.0.12 'openstreetmap-carto/project.mml' > 'openstreetmap-carto/project.xml'
+}
+
 command="$1"
 
 case "$command" in
     download)
     shift
     download_planet
+    ;;
+
+    style)
+    shift
+    get_style
     ;;
 
     *)
