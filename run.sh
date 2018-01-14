@@ -10,7 +10,9 @@ PLANET_MD5_URL="${PLANET_URL}.md5"
 OSMCARTO_VERSION="v4.6.0"
 OSMCARTO_LOCATION='https://github.com/gravitystorm/openstreetmap-carto.git'
 
-PGDATABASE='osmcarto_prerender'
+export PGDATABASE='osmcarto_prerender'
+FLAT_NODES='nodes.bin'
+OSM2PGSQL_CACHE='4000'
 
 function show_help() {
   cat << EOF
@@ -58,6 +60,22 @@ function get_external() {
   openstreetmap-carto/scripts/get-shapefiles.py
 }
 
+function import_database() {
+  # PGDATABASE is set, so postgres commands don't need a database name supplied
+
+  # Clean up any existing db and files
+  dropdb --if-exists "${PGDATABASE}"
+  rm -f -- "${FLAT_NODES}"
+
+  createdb
+  psql -Xqw -c 'CREATE EXTENSION postgis; CREATE EXTENSION hstore;'
+
+  osm2pgsql -G --hstore --style 'openstreetmap-carto/openstreetmap-carto.style' \
+    --tag-transform-script 'openstreetmap-carto/openstreetmap-carto.lua' \
+    --slim --drop --flat-nodes "${FLAT_NODES}" --cache "${OSM2PGSQL_CACHE}" \
+    -d "${PGDATABASE}" "${PLANET_FILE}"
+}
+
 command="$1"
 
 case "$command" in
@@ -74,6 +92,11 @@ case "$command" in
     external)
     shift
     get_external
+    ;;
+
+    database)
+    shift
+    import_database
     ;;
 
     *)
