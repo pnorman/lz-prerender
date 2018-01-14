@@ -25,7 +25,7 @@ EOF
 function download_planet() {
   # Clean up any remaining files
   rm -f -- "${PLANET_FILE}" "${PLANET_FILE}.md5" 'state.txt'
-  
+
   # Because the planet file name is set above, the provided md5 file needs altering
   MD5="$(curl -sL "${PLANET_MD5_URL}" | cut -f1 -d' ')"
   echo "${MD5}  ${PLANET_FILE}" > "${PLANET_FILE}.md5"  || { echo "Planet md5 failed to download"; exit 1; }
@@ -36,7 +36,7 @@ function download_planet() {
   md5sum --quiet --status --strict -c "${PLANET_FILE}.md5" || { echo "md5 check failed"; exit 1; }
 
   REPLICATION_BASE_URL="$(osmium fileinfo -g 'header.option.osmosis_replication_base_url' "${PLANET_FILE}")"
-  
+
   # sed to turn into / formatted, see https://unix.stackexchange.com/a/113798/149591
   REPLICATION_SEQUENCE_NUMBER="$( printf "%09d" "$(osmium fileinfo -g 'header.option.osmosis_replication_sequence_number' "${PLANET_FILE}")" | sed ':a;s@\B[0-9]\{3\}\>@/&@;ta' )"
   
@@ -54,6 +54,10 @@ function get_style() {
   carto -a 3.0.12 'openstreetmap-carto/project.mml' > 'openstreetmap-carto/project.xml'
 }
 
+function get_external() {
+  openstreetmap-carto/scripts/get-shapefiles.py
+}
+
 command="$1"
 
 case "$command" in
@@ -65,6 +69,11 @@ case "$command" in
     style)
     shift
     get_style
+    ;;
+
+    external)
+    shift
+    get_external
     ;;
 
     *)
