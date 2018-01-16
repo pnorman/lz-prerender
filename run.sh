@@ -14,7 +14,7 @@ export PGDATABASE='osmcarto_prerender'
 FLAT_NODES='nodes.bin'
 OSM2PGSQL_CACHE='4000'
 
-CURL='curl -s -L --http2'
+CURL='curl -s -L'
 function show_help() {
   cat << EOF
 Usage: ${0##*/} mode
