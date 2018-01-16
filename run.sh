@@ -14,6 +14,7 @@ export PGDATABASE='osmcarto_prerender'
 FLAT_NODES='nodes.bin'
 OSM2PGSQL_CACHE='4000'
 
+CURL='curl -s -L --http2'
 function show_help() {
   cat << EOF
 Usage: ${0##*/} mode
@@ -29,11 +30,11 @@ function download_planet() {
   rm -f -- "${PLANET_FILE}" "${PLANET_FILE}.md5" 'state.txt'
 
   # Because the planet file name is set above, the provided md5 file needs altering
-  MD5="$(curl -sL "${PLANET_MD5_URL}" | cut -f1 -d' ')"
-  echo "${MD5}  ${PLANET_FILE}" > "${PLANET_FILE}.md5"  || { echo "Planet md5 failed to download"; exit 1; }
+  MD5="$($CURL "${PLANET_MD5_URL}" | cut -f1 -d' ')"
+  echo "${MD5}  ${PLANET_FILE}" > "${PLANET_FILE}.md5"
 
   # Download the planet
-  curl -sL -o "${PLANET_FILE}" "${PLANET_URL}" || { echo "Planet file failed to download"; exit 1; }
+  $CURL -o "${PLANET_FILE}" "${PLANET_URL}" || { echo "Planet file failed to download"; exit 1; }
 
   md5sum --quiet --status --strict -c "${PLANET_FILE}.md5" || { echo "md5 check failed"; exit 1; }
 
@@ -42,7 +43,7 @@ function download_planet() {
   # sed to turn into / formatted, see https://unix.stackexchange.com/a/113798/149591
   REPLICATION_SEQUENCE_NUMBER="$( printf "%09d" "$(osmium fileinfo -g 'header.option.osmosis_replication_sequence_number' "${PLANET_FILE}")" | sed ':a;s@\B[0-9]\{3\}\>@/&@;ta' )"
   
-  curl -sL -o 'state.txt' "${REPLICATION_BASE_URL}/${REPLICATION_SEQUENCE_NUMBER}.state.txt"
+  $CURL -o 'state.txt' "${REPLICATION_BASE_URL}/${REPLICATION_SEQUENCE_NUMBER}.state.txt"
 }
 
 # Preconditions: None
