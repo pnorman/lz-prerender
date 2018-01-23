@@ -76,6 +76,8 @@ function import_database() {
     --tag-transform-script 'openstreetmap-carto/openstreetmap-carto.lua' \
     --slim --drop --flat-nodes "${FLAT_NODES}" --cache "${OSM2PGSQL_CACHE}" \
     -d "${PGDATABASE}" "${PLANET_FILE}"
+
+  rm -f -- "${FLAT_NODES}"
 }
 
 function install_mapproxy() {
