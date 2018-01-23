@@ -55,6 +55,22 @@ function get_style() {
   rm -rf -- 'openstreetmap-carto'
   git -c advice.detachedHead=false clone --quiet --depth 1 \
     --branch "${OSMCARTO_VERSION}" -- "${OSMCARTO_LOCATION}" 'openstreetmap-carto'
+
+  git -C 'openstreetmap-carto' apply << EOF
+diff --git a/project.mml b/project.mml
+index b8c3217..a41e550 100644
+--- a/project.mml
++++ b/project.mml
+@@ -30,7 +30,7 @@ _parts:
+     srs: "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
+   osm2pgsql: &osm2pgsql
+     type: "postgis"
+-    dbname: "gis"
++    dbname: "${PGDATABASE}"
+     key_field: ""
+     geometry_field: "way"
+     extent: "-20037508,-20037508,20037508,20037508"
+EOF
   carto -a 3.0.12 'openstreetmap-carto/project.mml' > 'openstreetmap-carto/project.xml'
 }
 
