@@ -43,7 +43,7 @@ function download_planet() {
 
   # sed to turn into / formatted, see https://unix.stackexchange.com/a/113798/149591
   REPLICATION_SEQUENCE_NUMBER="$( printf "%09d" "$(osmium fileinfo -g 'header.option.osmosis_replication_sequence_number' "${PLANET_FILE}")" | sed ':a;s@\B[0-9]\{3\}\>@/&@;ta' )"
-  
+
   $CURL -o 'state.txt' "${REPLICATION_BASE_URL}/${REPLICATION_SEQUENCE_NUMBER}.state.txt"
 }
 
