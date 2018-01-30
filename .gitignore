@@ -3,3 +3,5 @@ data.osm.pbf.md5
 state.txt
 openstreetmap-carto
 nodes.bin
+mapproxy/
+osm_tiles/
