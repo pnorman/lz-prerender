@@ -1,0 +1,5 @@
+seeds:
+  world:
+    caches: [osm_cache]
+    levels:
+      to: 8

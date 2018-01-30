@@ -1,0 +1,31 @@
+
+# This sets up the service at /tiles/osm, which is useful for debugging.
+# It doesn't get used for seeding.
+services:
+  demo:
+  tms:
+    use_grid_names: true
+    origin: 'nw'
+
+layers:
+  - name: osm
+    title: OpenStreetMap Carto
+    sources: [osm_cache]
+
+caches:
+  osm_cache:
+    grids: [GLOBAL_WEBMERCATOR]
+    sources: [osm-carto]
+    meta_size: [8,8]
+    cache:
+      type: file
+      # Force a meaningful name, since this is only being used for seeding
+      directory: osm_tiles
+      directory_layout: tms
+
+sources:
+  osm-carto:
+    type: mapnik
+    mapfile: openstreetmap-carto/project.xml
+
+globals:
