@@ -7,7 +7,7 @@ PLANET_FILE='data.osm.pbf'
 PLANET_URL='http://download.geofabrik.de/europe/liechtenstein-latest.osm.pbf'
 PLANET_MD5_URL="${PLANET_URL}.md5"
 
-OSMCARTO_VERSION="v4.6.0"
+OSMCARTO_VERSION="v4.9.0"
 OSMCARTO_LOCATION='https://github.com/gravitystorm/openstreetmap-carto.git'
 
 export PGDATABASE='osmcarto_prerender'
