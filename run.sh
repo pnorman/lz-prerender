@@ -94,6 +94,8 @@ function import_database() {
     -d "${PGDATABASE}" "${PLANET_FILE}"
 
   rm -f -- "${FLAT_NODES}"
+
+  openstreetmap-carto/scripts/indexes.py --fillfactor 100 | psql -Xqw -f -
 }
 
 function install_mapproxy() {
