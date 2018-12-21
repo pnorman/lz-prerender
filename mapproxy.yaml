@@ -27,5 +27,5 @@ sources:
   osm-carto:
     type: mapnik
     mapfile: openstreetmap-carto/project.xml
-
-globals:
+#
+#globals:
