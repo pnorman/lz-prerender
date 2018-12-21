@@ -25,6 +25,7 @@ Modes:
   external: Download external data
   database: Import into the database
   mapproxy: Install MapProxy
+  seed: Create the tiles with MapProxy
 EOF
 }
 
@@ -107,6 +108,12 @@ function install_mapproxy() {
   mapproxy/bin/pip install "MapProxy>=1.11.0,<=1.11.99"
 }
 
+function seed() {
+  rm -rf osm_cache
+  mapproxy/bin/mapproxy-seed -s seed.yaml -f mapproxy.yaml -c 7
+  rm -rf osm_tiles/tile_locks
+}
+
 command="$1"
 
 case "$command" in
@@ -133,6 +140,11 @@ case "$command" in
     mapproxy)
     shift
     install_mapproxy
+    ;;
+
+    seed)
+    shift
+    seed
     ;;
 
     *)
