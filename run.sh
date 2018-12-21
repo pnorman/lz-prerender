@@ -21,7 +21,10 @@ Usage: ${0##*/} mode
 
 Modes:
   download: Download a new planet
-
+  style: Download and build the style
+  external: Download external data
+  database: Import into the database
+  mapproxy: Install MapProxy
 EOF
 }
 
