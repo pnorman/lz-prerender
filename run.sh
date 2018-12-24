@@ -157,6 +157,11 @@ case "$command" in
     tarball
     ;;
 
+    optimize)
+    shift
+    optimize
+    ;;
+
     *)
     show_help
     ;;
