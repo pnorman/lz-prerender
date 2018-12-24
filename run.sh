@@ -26,6 +26,7 @@ Modes:
   database: Import into the database
   mapproxy: Install MapProxy
   seed: Create the tiles with MapProxy
+  optimize: Optimize PNGs in cache
 EOF
 }
 
@@ -114,6 +115,10 @@ function seed() {
   rm -rf osm_tiles/tile_locks
 }
 
+function optimize() {
+  find osm_tiles/{0,1,2,3,4,5,6,7,8,9,10}/ -type f -name '*.png' -print0 | parallel -0 -m -j 7 echo optipng -quiet
+}
+
 command="$1"
 
 case "$command" in
@@ -145,6 +150,11 @@ case "$command" in
     seed)
     shift
     seed
+    ;;
+
+    tarball)
+    shift
+    tarball
     ;;
 
     *)
