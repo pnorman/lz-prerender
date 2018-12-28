@@ -127,8 +127,8 @@ function tarball() {
   rm -rf tarballs
   mkdir tarballs
 
-  git -C openstreetmap-carto rev-parse HEAD > commit
-  osmium fileinfo -g 'header.option.osmosis_replication_timestamp' "${PLANET_FILE}" > timestamp
+  git -C openstreetmap-carto rev-parse HEAD > osm_tiles/commit
+  osmium fileinfo -g 'header.option.osmosis_replication_timestamp' "${PLANET_FILE}" > osm_tiles/timestamp
   tar -C osm_tiles --create --gzip --file tarballs/z8.tar.gz commit timestamp 0 1 2 3 4 5 6 7 8
 }
 
