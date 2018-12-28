@@ -119,7 +119,6 @@ function optimize() {
   find osm_tiles/{0,1,2,3,4,5,6}/ -type f -name '*.png' -print0 | parallel -0 -m optipng -quiet -o3 -i1
   find osm_tiles/{7,8}/ -type f -name '*.png' -print0 | parallel -0 -m optipng -quiet -o2 -i1
 }
-}
 
 command="$1"
 
