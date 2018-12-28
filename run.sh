@@ -111,12 +111,14 @@ function install_mapproxy() {
 
 function seed() {
   rm -rf osm_cache
-  mapproxy/bin/mapproxy-seed -s seed.yaml -f mapproxy.yaml -c 6
+  mapproxy/bin/mapproxy-seed -s seed.yaml -f mapproxy.yaml -c 7
   rm -rf osm_tiles/tile_locks
 }
 
 function optimize() {
-  find osm_tiles/{0,1,2,3,4,5,6,7,8,9,10}/ -type f -name '*.png' -print0 | parallel -0 -m -j 7 echo optipng -quiet
+  find osm_tiles/{0,1,2,3,4,5,6}/ -type f -name '*.png' -print0 | parallel -0 -m optipng -quiet -o3 -i1
+  find osm_tiles/{7,8}/ -type f -name '*.png' -print0 | parallel -0 -m optipng -quiet -o2 -i1
+}
 }
 
 command="$1"
