@@ -27,6 +27,7 @@ Modes:
   mapproxy: Install MapProxy
   seed: Create the tiles with MapProxy
   optimize: Optimize PNGs in cache
+  tarball: Create tarballs with tiles
 EOF
 }
 
@@ -116,8 +117,19 @@ function seed() {
 }
 
 function optimize() {
-  find osm_tiles/{0,1,2,3,4,5,6}/ -type f -name '*.png' -print0 | parallel -0 -m optipng -quiet -o3 -i1
-  find osm_tiles/{7,8}/ -type f -name '*.png' -print0 | parallel -0 -m optipng -quiet -o2 -i1
+  find osm_tiles/{0,1,2,3,4,5,6}/ -type f -name '*.png' -print0 | parallel -0 -m optipng -quiet -o4 -strip all
+  find osm_tiles/{7,8}/ -type f -name '*.png' -print0 | parallel -0 -m optipng -quiet -o2 -strip all
+  find osm_tiles/{9,10}/ -type f -name '*.png' -print0 | parallel -0 -m optipng -quiet -o1 -strip all
+}
+
+function tarball() {
+  # Clean up
+  rm -rf tarballs
+  mkdir tarballs
+
+  git -C openstreetmap-carto rev-parse HEAD > commit
+  osmium fileinfo -g 'header.option.osmosis_replication_timestamp' "${PLANET_FILE}" > timestamp
+  tar -C osm_tiles --create --gzip --file tarballs/z8.tar.gz commit timestamp 0 1 2 3 4 5 6 7 8
 }
 
 command="$1"
