@@ -16,7 +16,7 @@ caches:
   osm_cache:
     grids: [GLOBAL_WEBMERCATOR]
     sources: [osm-carto]
-    meta_size: [8,8]
+    meta_size: [32,32]
     cache:
       type: file
       # Force a meaningful name, since this is only being used for seeding
