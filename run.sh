@@ -123,16 +123,18 @@ function optimize() {
 }
 
 function tarball() {
-  # Clean up
-  rm -rf tarballs
-  mkdir tarballs
+  mkdir -p tarballs
 
   git -C openstreetmap-carto rev-parse HEAD > osm_tiles/commit
   osmium fileinfo -g 'header.option.osmosis_replication_timestamp' "${PLANET_FILE}" > osm_tiles/timestamp
-  GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file tarballs/z6.tar.gz commit timestamp 0 1 2 3 4 5 6
-  GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file tarballs/z8.tar.gz commit timestamp 0 1 2 3 4 5 6 7 8
-  GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file tarballs/z9.tar.gz commit timestamp 0 1 2 3 4 5 6 7 8 9
-  GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file tarballs/z10.tar.gz commit timestamp 0 1 2 3 4 5 6 7 8 9 10
+
+  # Figure out date code from timestamp
+  DATECODE="$(date -u -f osm_tiles/timestamp '+%y%m%d')"
+
+  GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file "tarballs/z6-$DATECODE.tar.gz" commit timestamp 0 1 2 3 4 5 6
+  GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file "tarballs/z6-$DATECODE.tar.gz" commit timestamp 0 1 2 3 4 5 6 7 8
+  GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file "tarballs/z6-$DATECODE.tar.gz" commit timestamp 0 1 2 3 4 5 6 7 8 9
+  GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file "tarballs/z6-$DATECODE.tar.gz" commit timestamp 0 1 2 3 4 5 6 7 8 9 10
 }
 
 command="$1"
