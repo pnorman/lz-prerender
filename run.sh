@@ -4,7 +4,7 @@ set -euf -o pipefail
 
 PLANET_FILE='data.osm.pbf'
 
-PLANET_URL='http://download.geofabrik.de/europe/liechtenstein-latest.osm.pbf'
+PLANET_URL='https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf'
 PLANET_MD5_URL="${PLANET_URL}.md5"
 
 OSMCARTO_VERSION="v4.18.0"
@@ -12,7 +12,7 @@ OSMCARTO_LOCATION='https://github.com/gravitystorm/openstreetmap-carto.git'
 
 export PGDATABASE='osmcarto_prerender'
 FLAT_NODES='nodes.bin'
-OSM2PGSQL_CACHE='4000'
+OSM2PGSQL_CACHE='48000'
 
 CURL='curl -s -L'
 function show_help() {
