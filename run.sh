@@ -137,6 +137,7 @@ function tarball() {
 }
 
 function upload() {
+  DATECODE="$(date -u -f osm_tiles/timestamp '+%y%m%d')"
   mv "tarballs/z6-$DATECODE.tar.gz"  "tarballs/z8-$DATECODE.tar.gz" "tarballs/z10-$DATECODE.tar.gz" /var/www/html/prerender
 }
 
