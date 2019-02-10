@@ -132,13 +132,12 @@ function tarball() {
   DATECODE="$(date -u -f osm_tiles/timestamp '+%y%m%d')"
 
   GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file "tarballs/z6-$DATECODE.tar.gz" commit timestamp 0 1 2 3 4 5 6
-  GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file "tarballs/z6-$DATECODE.tar.gz" commit timestamp 0 1 2 3 4 5 6 7 8
-  GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file "tarballs/z6-$DATECODE.tar.gz" commit timestamp 0 1 2 3 4 5 6 7 8 9
-  GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file "tarballs/z6-$DATECODE.tar.gz" commit timestamp 0 1 2 3 4 5 6 7 8 9 10
+  GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file "tarballs/z8-$DATECODE.tar.gz" commit timestamp 0 1 2 3 4 5 6 7 8
+  GZIP='--rsyncable --best' tar -C osm_tiles --create --gzip --file "tarballs/z10-$DATECODE.tar.gz" commit timestamp 0 1 2 3 4 5 6 7 8 9 10
 }
 
 function upload() {
-  mv "tarballs/z6-$DATECODE.tar.gz"  "tarballs/z6-$DATECODE.tar.gz"  "tarballs/z6-$DATECODE.tar.gz" "tarballs/z6-$DATECODE.tar.gz" /var/www/html/prerender
+  mv "tarballs/z6-$DATECODE.tar.gz"  "tarballs/z8-$DATECODE.tar.gz" "tarballs/z10-$DATECODE.tar.gz" /var/www/html/prerender
 }
 
 command="$1"
