@@ -138,7 +138,8 @@ function tarball() {
 
 function upload() {
   DATECODE="$(date -u -f osm_tiles/timestamp '+%y%m%d')"
-  mv "tarballs/z6-$DATECODE.tar.gz"  "tarballs/z8-$DATECODE.tar.gz" "tarballs/z10-$DATECODE.tar.gz" /var/www/html/prerender
+  # Hard-coded to upload to errol, using rrsync on the other end to specify the directory
+  rsync "tarballs/z6-$DATECODE.tar.gz"  "tarballs/z8-$DATECODE.tar.gz" "tarballs/z10-$DATECODE.tar.gz" pnorman@errol.openstreetmap.org:./
 }
 
 command="$1"
