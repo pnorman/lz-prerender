@@ -142,6 +142,7 @@ function upload() {
   DATECODE="$(date -u -f osm_tiles/timestamp '+%y%m%d')"
   # Hard-coded to upload to errol, using rrsync on the other end to specify the directory
   rsync "tarballs/z6-$DATECODE.tar.gz"  "tarballs/z8-$DATECODE.tar.gz" "tarballs/z10-$DATECODE.tar.gz" pnorman@errol.openstreetmap.org:./
+  rsync "osmcartodb-$DATECODE.bin" pnorman@errol.openstreetmap.org:./
 }
 
 function dump() {
