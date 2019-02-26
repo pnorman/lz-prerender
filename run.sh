@@ -81,7 +81,7 @@ EOF
 }
 
 function get_external() {
-  openstreetmap-carto/scripts/get-shapefiles.py
+  openstreetmap-carto/scripts/get-shapefiles.py > /dev/null
 }
 
 function import_database() {
@@ -112,7 +112,7 @@ function install_mapproxy() {
 
 function seed() {
   rm -rf osm_tiles
-  mapproxy/bin/mapproxy-seed -s seed.yaml -f mapproxy.yaml -c 7
+  mapproxy/bin/mapproxy-seed -s seed.yaml -f mapproxy.yaml -c 7 > /dev/null
   rm -rf osm_tiles/tile_locks
 }
 
