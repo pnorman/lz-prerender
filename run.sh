@@ -114,7 +114,7 @@ function install_mapproxy() {
 
 function seed() {
   rm -rf osm_tiles
-  mapproxy/bin/mapproxy-seed -s seed.yaml -f mapproxy.yaml -c 7 > /dev/null
+  mapproxy/bin/mapproxy-seed -s seed.yaml -f mapproxy.yaml -c 10 > /dev/null
   rm -rf osm_tiles/tile_locks
 }
 
@@ -148,7 +148,7 @@ function upload() {
 function dump() {
   DATECODE="$(date -u -f osm_tiles/timestamp '+%y%m%d')"
 
-  pg_dump -f "osmcartodb-$DATECODE.bin"  -F c -Z 9 \
+  pg_dump -f "osmcartodb-$DATECODE.bin"  -F c -Z 9 -j 2 \
     -x -w -t planet_osm_line -t planet_osm_point -t planet_osm_polygon -t planet_osm_roads
 }
 command="$1"
