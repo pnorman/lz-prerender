@@ -204,6 +204,23 @@ case "$command" in
     dump
     ;;
 
+    cron)
+    shift
+    download_planet &
+    get_style
+    get_external
+    wait
+
+    import_database
+
+    dump &
+    install_mapproxy
+    seed
+    optimize
+    wait
+
+    upload
+
     *)
     show_help
     ;;
