@@ -28,6 +28,8 @@ Modes:
   seed: Create the tiles with MapProxy
   optimize: Optimize PNGs in cache
   tarball: Create tarballs with tiles
+  upload: rsync files to dev
+  dump: creates a pg_dump file of the database
 EOF
 }
 
@@ -142,6 +144,12 @@ function upload() {
   rsync "tarballs/z6-$DATECODE.tar.gz"  "tarballs/z8-$DATECODE.tar.gz" "tarballs/z10-$DATECODE.tar.gz" pnorman@errol.openstreetmap.org:./
 }
 
+function dump() {
+  DATECODE="$(date -u -f osm_tiles/timestamp '+%y%m%d')"
+
+  pg_dump -f "osmcartodb-$DATECODE.bin"  -F c -Z 9 \
+    -x -w -t planet_osm_line -t planet_osm_point -t planet_osm_polygon -t planet_osm_roads
+}
 command="$1"
 
 case "$command" in
@@ -188,6 +196,11 @@ case "$command" in
     upload)
     shift
     upload
+    ;;
+
+    dump)
+    shift
+    dump
     ;;
 
     *)
