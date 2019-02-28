@@ -1,0 +1,28 @@
+Low-zoom pre-rendered OpenStreetMap Carto files
+
+There are two types of files distributed here: low zoom pre-rendered tiles, and pg_dumps of the database.
+
+Tarballs
+--------
+
+The tarballs consist of OpenStreetMap Carto tiles, which is currently the default style on OpenStreetMap.org.
+
+There are some minor differences from wehat you might see on the website
+
+- The exact version of OpenStreetMap Carto and the OpenStreetMap data may differ.
+- Pre-rendered metatiles are larger, so labels should be better
+- The pre-rendered tiles only go to zoom 10.
+
+Database dumps
+--------------
+
+The database dumps are created with the pg_dump file format and include the rendering tables.
+
+Basic usage
+===========
+
+To load the dumps into a local PostGIS database, start by creating a database with PostGIS, then load with pg_restore.
+
+    createdb -E utf-8 gis
+    psql -Xq -d gis -c 'CREATE EXTENSION postgis; CREATE EXTENSION hstore;'
+    pg_restore -d gis -j 8 --no-owner osmcartodb-$DATECODE.bin

@@ -6,3 +6,7 @@ These scripts are designed to download OSM data, load it into a database, and re
 
 - `osm2pgsql`, `shapeindex`, `carto`, `osmium`, `virtualenv`, `parallel`, `optipng` in `$PATH`
 - PostgreSQL access, including superuser
+
+## Using the files
+
+For documentation see [README-upload](README-upload).
