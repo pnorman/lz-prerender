@@ -53,6 +53,7 @@ function download_planet() {
   REPLICATION_SEQUENCE_NUMBER="$( printf "%09d" "$(osmium fileinfo -g 'header.option.osmosis_replication_sequence_number' "${PLANET_FILE}")" | sed ':a;s@\B[0-9]\{3\}\>@/&@;ta' )"
 
   $CURL -o 'state.txt' "${REPLICATION_BASE_URL}/${REPLICATION_SEQUENCE_NUMBER}.state.txt"
+  osmium fileinfo -g 'header.option.osmosis_replication_timestamp' "${PLANET_FILE}" > timestamp
 }
 
 # Preconditions: None
@@ -80,6 +81,7 @@ index b8c3217..a41e550 100644
      extent: "-20037508,-20037508,20037508,20037508"
 EOF
   carto -a 3.0.12 'openstreetmap-carto/project.mml' > 'openstreetmap-carto/project.xml'
+  git -C openstreetmap-carto rev-parse HEAD > commit
 }
 
 function get_external() {
@@ -127,8 +129,8 @@ function optimize() {
 function tarball() {
   mkdir -p tarballs
 
-  git -C openstreetmap-carto rev-parse HEAD > osm_tiles/commit
-  osmium fileinfo -g 'header.option.osmosis_replication_timestamp' "${PLANET_FILE}" > osm_tiles/timestamp
+  cp commit osm_tiles/commit
+  cp timestamp osm_tiles/timestamp
 
   # Figure out date code from timestamp
   DATECODE="$(date -u -f osm_tiles/timestamp '+%y%m%d')"
@@ -139,14 +141,14 @@ function tarball() {
 }
 
 function upload() {
-  DATECODE="$(date -u -f osm_tiles/timestamp '+%y%m%d')"
+  DATECODE="$(date -u -f timestamp '+%y%m%d')"
   # Hard-coded to upload to errol, using rrsync on the other end to specify the directory
   rsync "tarballs/z6-$DATECODE.tar.gz"  "tarballs/z8-$DATECODE.tar.gz" "tarballs/z10-$DATECODE.tar.gz" pnorman@errol.openstreetmap.org:./
   rsync "osmcartodb-$DATECODE.bin" pnorman@errol.openstreetmap.org:./
 }
 
 function dump() {
-  DATECODE="$(date -u -f osm_tiles/timestamp '+%y%m%d')"
+  DATECODE="$(date -u -f timestamp '+%y%m%d')"
 
   pg_dump -f "osmcartodb-$DATECODE.bin"  -F c -Z 9 -j 2 \
     -x -w -t planet_osm_line -t planet_osm_point -t planet_osm_polygon -t planet_osm_roads
