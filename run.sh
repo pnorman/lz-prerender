@@ -116,7 +116,7 @@ function install_mapproxy() {
 
 function seed() {
   rm -rf osm_tiles
-  mapproxy/bin/mapproxy-seed -s seed.yaml -f mapproxy.yaml -c 10 > /dev/null
+  mapproxy/bin/mapproxy-seed -s seed.yaml -f mapproxy.yaml -c 10 > /dev/null 2> seed.log
   rm -rf osm_tiles/tile_locks
 }
 
