@@ -222,7 +222,7 @@ case "$command" in
     wait
 
     upload
-
+    ;;
     *)
     show_help
     ;;
