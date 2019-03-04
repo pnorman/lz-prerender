@@ -150,7 +150,7 @@ function upload() {
 function dump() {
   DATECODE="$(date -u -f timestamp '+%y%m%d')"
 
-  pg_dump -f "osmcartodb-$DATECODE.bin"  -F c -Z 9 -j 2 \
+  pg_dump -f "osmcartodb-$DATECODE.bin"  -F c -Z 9 \
     -x -w -t planet_osm_line -t planet_osm_point -t planet_osm_polygon -t planet_osm_roads
 }
 command="$1"
