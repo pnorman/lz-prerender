@@ -212,6 +212,7 @@ case "$command" in
     install_mapproxy
     seed
     optimize
+    tarball
     wait
 
     upload
