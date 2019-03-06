@@ -46,13 +46,6 @@ function download_planet() {
 
   md5sum --quiet --status --strict -c "${PLANET_FILE}.md5" || { echo "md5 check failed"; exit 1; }
 
-  REPLICATION_BASE_URL="$(osmium fileinfo -g 'header.option.osmosis_replication_base_url' "${PLANET_FILE}")"
-  echo "baseUrl=${REPLICATION_BASE_URL}" > 'configuration.txt'
-
-  # sed to turn into / formatted, see https://unix.stackexchange.com/a/113798/149591
-  REPLICATION_SEQUENCE_NUMBER="$( printf "%09d" "$(osmium fileinfo -g 'header.option.osmosis_replication_sequence_number' "${PLANET_FILE}")" | sed ':a;s@\B[0-9]\{3\}\>@/&@;ta' )"
-
-  $CURL -o 'state.txt' "${REPLICATION_BASE_URL}/${REPLICATION_SEQUENCE_NUMBER}.state.txt"
   osmium fileinfo -g 'header.option.osmosis_replication_timestamp' "${PLANET_FILE}" > timestamp
 }
 
