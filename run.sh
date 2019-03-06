@@ -35,7 +35,7 @@ EOF
 
 function download_planet() {
   # Clean up any remaining files
-  rm -f -- "${PLANET_FILE}" "${PLANET_FILE}.md5" 'state.txt' 'configuration.txt'
+  rm -f -- "${PLANET_FILE}" "${PLANET_FILE}.md5" 'timestamp'
 
   # Because the planet file name is set above, the provided md5 file needs altering
   MD5="$($CURL "${PLANET_MD5_URL}" | cut -f1 -d' ')"
