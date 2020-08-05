@@ -7,7 +7,7 @@ PLANET_FILE='data.osm.pbf'
 PLANET_URL='https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf'
 PLANET_MD5_URL="${PLANET_URL}.md5"
 
-OSMCARTO_VERSION="v5.0.0"
+OSMCARTO_VERSION="v5.2.0"
 OSMCARTO_LOCATION='https://github.com/gravitystorm/openstreetmap-carto.git'
 
 export PGDATABASE='osmcarto_prerender'
